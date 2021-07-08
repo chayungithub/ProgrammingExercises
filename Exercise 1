@@ -1,0 +1,34 @@
+# Exercise 1
+# matched parentheses checker
+
+# Declare variables for containing open and close bracket
+open_par = ["(","{","["]
+close_par = [")","}","]"]
+  
+# Function to check parentheses
+def is_matched(S):
+    # Declare stack data structure variable for colleting brackets
+    stack = []
+    for i in S:
+        if i in open_par:
+            stack.append(i)
+        elif i in close_par:
+            position = close_par.index(i)
+            if ((len(stack) > 0) and (open_par[position] == stack[len(stack)-1])):
+                stack.pop()
+            else:
+                return False
+    if len(stack) == 0:
+        return True
+    else:
+        return False
+        
+# Driver code
+string = "{[]{()}}"
+print(string,"is", is_matched(string))
+  
+string = "[{}]"
+print(string,"is", is_matched(string))
+  
+string = "((()"
+print(string,"is",is_matched(string))
