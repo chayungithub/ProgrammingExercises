@@ -1,0 +1,56 @@
+# Exercise 3
+# Task 1 and 
+import pandas as pd
+from sklearn.cluster import KMeans
+import numpy as np
+import sklearn
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import matplotlib.dates as md
+import joblib
+from datetime import datetime
+
+# Import data
+df_original = pd.read_csv (r'TS-data.csv')
+
+# Convert unixtimestamp
+timestamp = df_original["ts"]
+for i in range(len(timestamp)):
+  timestamp[i] = datetime.utcfromtimestamp(timestamp[i]).strftime('%Y-%m-%d %H:%M:%S')
+
+# Separate each week data
+b = []
+df_sep = []
+y_axis = []
+for i in range(0, 24):
+  y_axis.append(i)
+date = 4 # Date of data start from 4th day
+c = []
+for i in range(len(timestamp)):
+  c.append(0)
+for i in range(len(df_original)):
+  if int(timestamp[i][8])*10 + int(timestamp[i][9]) == date:
+    pass
+  else:
+    b.append(i)
+    date += 1
+for i in range(len(b)):
+  if i == 0:
+    df_sep.append(df_original.iloc[:b[i], 1:])
+  else:
+    df_sep.append(df_original.iloc[b[i-1]:b[i], 1:])
+df_sep.append(df_original.iloc[b[i]:, 1:])
+
+# Save image
+for i in range(len(df_sep)):
+  dates = df_sep[i]['ts']
+  values = df_sep[i]['seconds']
+  plt.xticks( rotation=25 )
+  plt.plot(dates,values)
+  name_pic = 'image' + str(i) + '.jpg'
+  plt.savefig(name_pic)
+  plt.show()
